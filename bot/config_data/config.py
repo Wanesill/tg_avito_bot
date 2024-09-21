@@ -25,6 +25,7 @@ class DbConfig(BaseModel):
 class NatsConfig(BaseModel):
     dsn: NatsDsn
 
+
 class LoggingConfig(BaseModel):
     level: str
 
