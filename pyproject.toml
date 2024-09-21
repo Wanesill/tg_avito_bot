@@ -9,6 +9,11 @@ readme = "README.md"
 python = "^3.11"
 aiogram = "^3.13.0"
 pyyaml = "^6.0.2"
+aiogram-dialog = "^2.2.0"
+fluentogram = "^1.1.7"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.35"}
+psycopg = {extras = ["binary"], version = "^3.2.2"}
+alembic = "^1.13.2"
 
 
 [tool.poetry.group.dev.dependencies]

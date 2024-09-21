@@ -1,2 +1,6 @@
 bot:
   token: "1234567890:AaBbCcDdEeFfGrOoShALlMmNnOoPpQqRrSs"
+
+db:
+  dsn: "driver://user:pass@localhost/dbname"
+  is_echo: false
