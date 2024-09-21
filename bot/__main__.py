@@ -8,7 +8,7 @@ from aiogram_dialog import setup_dialogs
 from fluentogram import TranslatorHub
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from bot.config_data import BotConfig, DbConfig, get_config
+from bot.config_data import BotConfig, DbConfig, get_config, NatsConfig
 from bot.dialogs import start_dialog
 from bot.handlers import commands_router
 from bot.middlewares import (
@@ -16,7 +16,8 @@ from bot.middlewares import (
     TrackAllUsersMiddleware,
     TranslatorRunnerMiddleware,
 )
-from bot.utils import create_translator_hub
+from bot.storage import NatsStorage
+from bot.utils import connect_to_nats, create_translator_hub
 
 
 logger = logging.getLogger(__name__)
@@ -37,9 +38,13 @@ async def main() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
 
+    nats_config = get_config(NatsConfig, "nats")
+    nc, js = await connect_to_nats(server=str(nats_config.dsn))
+    storage: NatsStorage = await NatsStorage(nc=nc, js=js).create_storage()
+
     translator_hub: TranslatorHub = create_translator_hub()
 
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
 
     db_config = get_config(DbConfig, "db")
     engine = create_async_engine(
@@ -57,8 +62,10 @@ async def main() -> None:
 
     setup_dialogs(dp)
 
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, _translator_hub=translator_hub)
+    try:
+        await dp.start_polling(bot, _translator_hub=translator_hub)
+    finally:
+        await nc.close()
 
 
 if __name__ == "__main__":
