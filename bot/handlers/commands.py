@@ -11,6 +11,7 @@ from bot.database.requests import get_profile, insert_account_slots
 from bot.states import StartSG
 
 logger = logging.getLogger(__name__)
+logger.level = logging.INFO
 
 commands_router = Router()
 

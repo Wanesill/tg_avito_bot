@@ -25,6 +25,9 @@ class DbConfig(BaseModel):
 class NatsConfig(BaseModel):
     dsn: NatsDsn
 
+class LoggingConfig(BaseModel):
+    level: str
+
 
 @lru_cache(maxsize=1)
 def __parse_config_file() -> dict:

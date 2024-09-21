@@ -8,7 +8,7 @@ from aiogram_dialog import setup_dialogs
 from fluentogram import TranslatorHub
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from bot.config_data import BotConfig, DbConfig, get_config, NatsConfig
+from bot.config_data import BotConfig, DbConfig, get_config, LoggingConfig, NatsConfig
 from bot.dialogs import start_dialog
 from bot.handlers import commands_router
 from bot.middlewares import (
@@ -24,8 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
+    logging_config = get_config(LoggingConfig, "logging")
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging_config.level,
         format="%(filename)s:%(lineno)d #%(levelname)-8s "
         "[%(asctime)s] - %(name)s - %(message)s",
         filemode="w",
