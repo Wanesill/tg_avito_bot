@@ -8,6 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from bot.database.models import AccountSlot, Profile
 
 
+async def test_connection(session: AsyncSession):
+    stmt = select(1)
+    return await session.scalar(stmt)
+
+
 async def upsert_user(
     session: AsyncSession, telegram_id: int, telegram_username: Optional[str]
 ) -> None:

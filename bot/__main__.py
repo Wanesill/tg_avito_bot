@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from bot.config_data import BotConfig, DbConfig, get_config, LoggingConfig, NatsConfig
 from bot.dialogs import start_dialog
+from bot.database.requests import test_connection
 from bot.handlers import commands_router
 from bot.middlewares import (
     DbSessionMiddleware,
@@ -53,6 +54,9 @@ async def main() -> None:
         echo=db_config.is_echo,
     )
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
+
+    async with sessionmaker() as session:
+        await test_connection(session)
 
     dp.update.outer_middleware(DbSessionMiddleware(sessionmaker))
     dp.message.outer_middleware(TrackAllUsersMiddleware())
