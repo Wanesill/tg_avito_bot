@@ -4,3 +4,6 @@ bot:
 db:
   dsn: "driver://user:pass@localhost/dbname"
   is_echo: false
+
+nats:
+  dsn: "nats://127.0.0.1:4222"
