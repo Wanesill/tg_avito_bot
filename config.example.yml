@@ -10,3 +10,6 @@ nats:
 
 logging:
   level: "WARNING"
+  format: "%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s"
+  filemode: "w"
+  filename: "info.log"

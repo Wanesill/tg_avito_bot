@@ -28,10 +28,9 @@ async def main() -> None:
     logging_config = get_config(LoggingConfig, "logging")
     logging.basicConfig(
         level=logging_config.level,
-        format="%(filename)s:%(lineno)d #%(levelname)-8s "
-        "[%(asctime)s] - %(name)s - %(message)s",
-        filemode="w",
-        filename="info.log",
+        format=logging_config.format,
+        filemode=logging_config.filemode,
+        filename=logging_config.filename,
     )
 
     bot_config = get_config(BotConfig, "bot")

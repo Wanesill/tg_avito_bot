@@ -28,6 +28,9 @@ class NatsConfig(BaseModel):
 
 class LoggingConfig(BaseModel):
     level: str
+    format: str
+    filemode: str
+    filename: str
 
 
 @lru_cache(maxsize=1)
