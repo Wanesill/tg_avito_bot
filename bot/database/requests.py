@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Optional
 
 from sqlalchemy import select
@@ -33,7 +33,7 @@ async def get_profile(
     session: AsyncSession,
     telegram_id: int,
 ) -> Profile:
-    stmt = select(Profile).where(telegram_id == Profile.telegram_id)
+    stmt = select(Profile).where(Profile.telegram_id == telegram_id)
     result = await session.execute(stmt)
     return result.unique().scalar_one()
 
@@ -43,14 +43,16 @@ async def insert_account_slots(
     profile: Profile,
     count: int,
 ) -> None:
-    subscription_time = (
-        datetime.utcnow() - timedelta(days=27)
-        if profile.is_start
-        else datetime.utcnow()
-    )
+    subscription_start = datetime.now(UTC)
+    days_subscription = 3 if profile.is_start else 30
+    subscription_end = subscription_start + timedelta(days=days_subscription)
 
     for _ in range(count):
-        account_slot = AccountSlot(profile=profile, subscription_time=subscription_time)
+        account_slot = AccountSlot(
+            profile=profile,
+            subscription_start=subscription_start,
+            subscription_end=subscription_end,
+        )
         session.add(account_slot)
 
     await session.commit()

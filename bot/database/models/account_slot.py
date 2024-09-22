@@ -16,7 +16,8 @@ class AccountSlot(Base):
         return "account_slot"
 
     profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"), nullable=False)
-    subscription_time: Mapped[int] = mapped_column(DateTime(), nullable=False)
+    subscription_start: Mapped[int] = mapped_column(DateTime(), nullable=False)
+    subscription_end: Mapped[int] = mapped_column(DateTime(), nullable=False)
     profile: Mapped["Profile"] = relationship(
         back_populates="account_slots", uselist=False, lazy="joined"
     )
