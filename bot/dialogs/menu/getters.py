@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from bot.locales.stub import TranslatorRunner
 
 
-async def get_information_for_menu(
+async def menu_getter(
     dialog_manager: DialogManager, i18n: TranslatorRunner, **kwargs
 ) -> dict[str, str]:
     count_account_slots = dialog_manager.start_data["count_account_slots"]

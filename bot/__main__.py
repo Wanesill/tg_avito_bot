@@ -9,7 +9,7 @@ from fluentogram import TranslatorHub
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from bot.config_data import BotConfig, DbConfig, get_config, LoggingConfig, NatsConfig
-from bot.dialogs import menu_dialog
+from bot.dialogs import information_dialog, menu_dialog
 from bot.database.requests import test_connection
 from bot.handlers import commands_router
 from bot.middlewares import (
@@ -66,6 +66,7 @@ async def main() -> None:
 
     dp.include_router(commands_router)
     dp.include_router(menu_dialog)
+    dp.include_router(information_dialog)
 
     setup_dialogs(dp)
 

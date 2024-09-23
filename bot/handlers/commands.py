@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
-from aiogram_dialog import DialogManager, StartMode
+from aiogram_dialog import DialogManager, ShowMode, StartMode
 from fluentogram import TranslatorRunner
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -52,6 +52,7 @@ async def process_menu_command(
     await dialog_manager.start(
         state=MenuSG.menu,
         mode=StartMode.RESET_STACK,
+        show_mode=ShowMode.DELETE_AND_SEND,
         data={
             "count_account_slots": count_account_slots,
             "count_activate_accounts": count_activate_accounts,
