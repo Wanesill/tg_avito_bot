@@ -24,4 +24,3 @@ class AccountSlot(Base):
     account: Mapped["Account"] = relationship(
         back_populates="account_slot", uselist=False, lazy="selectin"
     )
-

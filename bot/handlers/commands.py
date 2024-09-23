@@ -44,9 +44,16 @@ async def process_menu_command(
     session: AsyncSession,
 ) -> None:
     profile: Profile = await get_profile(session, message.from_user.id)
+    count_account_slots = len(profile.account_slots)
+    count_activate_accounts = len(
+        [account_slot for account_slot in profile.account_slots if account_slot.account]
+    )
 
     await dialog_manager.start(
-        state=MenuSG.main_menu,
+        state=MenuSG.menu,
         mode=StartMode.RESET_STACK,
-        data={"count_account_slots": len(profile.account_slots)},
+        data={
+            "count_account_slots": count_account_slots,
+            "count_activate_accounts": count_activate_accounts,
+        },
     )

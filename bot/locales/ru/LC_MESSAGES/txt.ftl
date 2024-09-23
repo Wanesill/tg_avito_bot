@@ -13,3 +13,4 @@ message-start-profile-old = У вас уже есть/был пробный пе
 
     Для перехода в главное меню бота введите: /menu
 message-menu = Количество слотов: { $count_account_slots }
+    Количество активированных аккаунтов: { $count_activate_accounts }

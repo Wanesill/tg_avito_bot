@@ -23,8 +23,11 @@ class Message:
 
     @staticmethod
     def menu(
-        *, count_account_slots
-    ) -> Literal["""Количество слотов: { $count_account_slots }"""]: ...
+        *, count_account_slots, count_activate_accounts
+    ) -> Literal[
+        """Количество слотов: { $count_account_slots }
+Количество активированных аккаунтов: { $count_activate_accounts }"""
+    ]: ...
 
 class MessageStart:
     profile: MessageStartProfile
