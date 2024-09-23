@@ -1,4 +1,5 @@
+from .account import Account
 from .account_slot import AccountSlot
 from .profile import Profile
 
-__all__ = ["AccountSlot", "Profile"]
+__all__ = ["Account", "AccountSlot", "Profile"]

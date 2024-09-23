@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, func
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
 
 from bot.database import Base
 
 if TYPE_CHECKING:
-    from bot.database import Profile
+    from bot.database import Account, Profile
 
 
 class AccountSlot(Base):
@@ -21,3 +21,7 @@ class AccountSlot(Base):
     profile: Mapped["Profile"] = relationship(
         back_populates="account_slots", uselist=False, lazy="joined"
     )
+    account: Mapped["Account"] = relationship(
+        back_populates="account_slot", uselist=False, lazy="selectin"
+    )
+

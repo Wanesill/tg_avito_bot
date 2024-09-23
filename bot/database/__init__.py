@@ -1,4 +1,4 @@
 from .base import Base
-from .models import AccountSlot, Profile
+from .models import Account, AccountSlot, Profile
 
-__all__ = ["AccountSlot", "Base", "Profile"]
+__all__ = ["Account", "AccountSlot", "Base", "Profile"]
