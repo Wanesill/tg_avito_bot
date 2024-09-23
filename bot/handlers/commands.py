@@ -1,14 +1,19 @@
 import logging
+from typing import TYPE_CHECKING
 
 from aiogram import Router
-from aiogram.filters import CommandStart
+from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 from aiogram_dialog import DialogManager, StartMode
+from fluentogram import TranslatorRunner
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.database import Profile
 from bot.database.requests import get_profile, insert_account_slots
-from bot.states import StartSG
+from bot.states import MenuSG
+
+if TYPE_CHECKING:
+    from bot.locales.stub import TranslatorRunner
 
 logger = logging.getLogger(__name__)
 logger.level = logging.INFO
@@ -18,21 +23,30 @@ commands_router = Router()
 
 @commands_router.message(CommandStart())
 async def process_start_command(
-    message: Message, dialog_manager: DialogManager, session: AsyncSession
+    message: Message,
+    session: AsyncSession,
+    i18n: TranslatorRunner,
 ) -> None:
     profile: Profile = await get_profile(session, message.from_user.id)
 
     if profile.is_start and not profile.account_slots:
         await insert_account_slots(session, profile, 1)
-
         logger.info(f"Создан новый профиль: {message.from_user.id}")
-
-        is_new_profile = True
+        await message.answer(text=i18n.message.start.profile.new())
     else:
-        is_new_profile = False
+        await message.answer(text=i18n.message.start.profile.old())
+
+
+@commands_router.message(Command("menu"))
+async def process_menu_command(
+    message: Message,
+    dialog_manager: DialogManager,
+    session: AsyncSession,
+) -> None:
+    profile: Profile = await get_profile(session, message.from_user.id)
 
     await dialog_manager.start(
-        state=StartSG.start,
+        state=MenuSG.main_menu,
         mode=StartMode.RESET_STACK,
-        data={"is_new_profile": is_new_profile},
+        data={"count_account_slots": len(profile.account_slots)},
     )

@@ -1,5 +1,5 @@
 from aiogram.fsm.state import State, StatesGroup
 
 
-class StartSG(StatesGroup):
-    start = State()
+class MenuSG(StatesGroup):
+    main_menu = State()

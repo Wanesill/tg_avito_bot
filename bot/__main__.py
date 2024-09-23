@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from fileinput import filename
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -10,7 +9,7 @@ from fluentogram import TranslatorHub
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from bot.config_data import BotConfig, DbConfig, get_config, LoggingConfig, NatsConfig
-from bot.dialogs import start_dialog
+from bot.dialogs import menu_dialog
 from bot.database.requests import test_connection
 from bot.handlers import commands_router
 from bot.middlewares import (
@@ -27,7 +26,9 @@ logger = logging.getLogger(__name__)
 
 async def main() -> None:
     logging_config = get_config(LoggingConfig, "logging")
-    file_log = logging.FileHandler(mode=logging_config.filemode, filename=logging_config.filename)
+    file_log = logging.FileHandler(
+        mode=logging_config.filemode, filename=logging_config.filename
+    )
     console_out = logging.StreamHandler()
     logging.basicConfig(
         handlers=(file_log, console_out) if logging_config.is_console else (file_log,),
@@ -64,7 +65,7 @@ async def main() -> None:
     dp.update.outer_middleware(TranslatorRunnerMiddleware())
 
     dp.include_router(commands_router)
-    dp.include_router(start_dialog)
+    dp.include_router(menu_dialog)
 
     setup_dialogs(dp)
 

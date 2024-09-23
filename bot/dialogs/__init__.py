@@ -1,3 +1,3 @@
-from .start.dialogs import start_dialog
+from .start.dialogs import menu_dialog
 
-__all__ = ["start_dialog"]
+__all__ = ["menu_dialog"]

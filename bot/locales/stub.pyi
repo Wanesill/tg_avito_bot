@@ -3,12 +3,33 @@ from typing import Literal
 class TranslatorRunner:
     def get(self, path: str, **kwargs) -> str: ...
 
-    start: Start
+    button: Button
+    message: Message
 
-class Start:
-    profile: StartProfile
+class Button:
+    @staticmethod
+    def accounts() -> Literal["""Список аккаунтов"""]: ...
+    @staticmethod
+    def add_account() -> Literal["""Добавить аккаунт"""]: ...
+    @staticmethod
+    def information() -> Literal["""Информация"""]: ...
+    @staticmethod
+    def buy_account_slot() -> Literal["""Купить слот"""]: ...
+    @staticmethod
+    def chat_support() -> Literal["""👨‍🔧 Чат поддержки"""]: ...
 
-class StartProfile:
+class Message:
+    start: MessageStart
+
+    @staticmethod
+    def menu(
+        *, count_account_slots
+    ) -> Literal["""Количество слотов: { $count_account_slots }"""]: ...
+
+class MessageStart:
+    profile: MessageStartProfile
+
+class MessageStartProfile:
     @staticmethod
     def new() -> (
         Literal[

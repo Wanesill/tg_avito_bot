@@ -1,3 +1,3 @@
-from .start import StartSG
+from .menu import MenuSG
 
-__all__ = ["StartSG"]
+__all__ = ["MenuSG"]
