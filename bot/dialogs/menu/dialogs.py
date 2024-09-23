@@ -1,14 +1,14 @@
 from aiogram_dialog import Dialog, Window
-from aiogram_dialog.widgets.kbd import Button, Group, Start, Url
+from aiogram_dialog.widgets.kbd import Button, Group, SwitchTo, Url
 from aiogram_dialog.widgets.text import Const, Format
 
-from bot.dialogs.menu.getters import menu_getter
+from bot.dialogs.menu.getters import information_getter, menu_getter
 from bot.dialogs.menu.handlers import (
     process_accounts_press,
     process_add_account_press,
     process_buy_account_slot_press,
 )
-from bot.states import InformationSG, MenuSG
+from bot.states import MenuSG
 
 menu_dialog = Dialog(
     Window(
@@ -24,10 +24,10 @@ menu_dialog = Dialog(
                 id="add_account",
                 on_click=process_add_account_press,
             ),
-            Start(
+            SwitchTo(
                 text=Format("{button_information}"),
                 id="information",
-                state=InformationSG.information,
+                state=MenuSG.information,
             ),
             Button(
                 text=Format("{button_buy_account_slot}"),
@@ -43,5 +43,11 @@ menu_dialog = Dialog(
         ),
         getter=menu_getter,
         state=MenuSG.menu,
+    ),
+    Window(
+        Format("{message_information}"),
+        SwitchTo(text=Format("{button_menu}"), id="menu", state=MenuSG.menu),
+        getter=information_getter,
+        state=MenuSG.information,
     ),
 )

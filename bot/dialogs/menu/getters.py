@@ -25,3 +25,11 @@ async def menu_getter(
         "button_buy_account_slot": i18n.button.buy_account_slot(),
         "button_chat_support": i18n.button.chat_support(),
     }
+
+async def information_getter(
+    dialog_manager: DialogManager, i18n: TranslatorRunner, **kwargs
+) -> dict[str, str]:
+    return {
+        "message_information": i18n.message.information(),
+        "button_menu": i18n.button.menu(),
+    }
