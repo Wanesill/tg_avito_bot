@@ -31,6 +31,7 @@ class LoggingConfig(BaseModel):
     format: str
     filemode: str
     filename: str
+    is_console: bool
 
 
 @lru_cache(maxsize=1)

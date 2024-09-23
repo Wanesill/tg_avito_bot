@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from fileinput import filename
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -26,11 +27,12 @@ logger = logging.getLogger(__name__)
 
 async def main() -> None:
     logging_config = get_config(LoggingConfig, "logging")
+    file_log = logging.FileHandler(mode=logging_config.filemode, filename=logging_config.filename)
+    console_out = logging.StreamHandler() if logging_config.is_console else None
     logging.basicConfig(
+        handlers=(file_log, console_out),
         level=logging_config.level,
         format=logging_config.format,
-        filemode=logging_config.filemode,
-        filename=logging_config.filename,
     )
 
     bot_config = get_config(BotConfig, "bot")
