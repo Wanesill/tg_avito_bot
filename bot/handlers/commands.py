@@ -58,3 +58,11 @@ async def process_menu_command(
             "count_activate_accounts": count_activate_accounts,
         },
     )
+
+
+@commands_router.message(Command("cancel"))
+async def process_cancel_command(
+    message: Message,
+    dialog_manager: DialogManager,
+) -> None:
+    await dialog_manager.done(show_mode=ShowMode.DELETE_AND_SEND)
