@@ -31,7 +31,7 @@ async def main() -> None:
     )
     console_out = logging.StreamHandler()
     logging.basicConfig(
-        handlers=(file_log, console_out) if logging_config.is_console else (file_log,),
+        handlers=(console_out,) if logging_config.is_console else (file_log,),
         level=logging_config.level,
         format=logging_config.format,
     )
