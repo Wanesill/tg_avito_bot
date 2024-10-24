@@ -3,3 +3,6 @@ bot:
 
 db:
   dsn: "driver://user:password@host/dbname"
+
+nats:
+  dsn: "nats://host:post"

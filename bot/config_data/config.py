@@ -2,7 +2,7 @@ from functools import lru_cache
 from os import getenv
 from typing import Type, TypeVar
 
-from pydantic import BaseModel, PostgresDsn, SecretStr
+from pydantic import BaseModel, NatsDsn, PostgresDsn, SecretStr
 from yaml import load
 
 try:
@@ -19,6 +19,10 @@ class BotConfig(BaseModel):
 
 class DbConfig(BaseModel):
     dsn: PostgresDsn
+
+
+class NatsConfig(BaseModel):
+    dsn: NatsDsn
 
 
 @lru_cache(maxsize=1)

@@ -6,7 +6,7 @@ from aiogram_dialog import setup_dialogs
 from fluentogram import TranslatorHub
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from bot.config_data import BotConfig, DbConfig, get_config
+from bot.config_data import BotConfig, DbConfig, get_config, NatsConfig
 from bot.database.requests import test_connection
 from bot.handlers import commands_router
 from bot.middlewares import (
@@ -14,7 +14,8 @@ from bot.middlewares import (
     TrackAllUsersMiddleware,
     TranslatorRunnerMiddleware,
 )
-from bot.utils import create_translator_hub
+from bot.storage import NatsStorage
+from bot.utils import connect_to_nats, create_translator_hub
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,7 +30,11 @@ async def main() -> None:
     bot_config = get_config(BotConfig, "bot")
     bot = Bot(token=bot_config.token.get_secret_value())
 
-    dp = Dispatcher()
+    nats_config = get_config(NatsConfig, "nats")
+    nc, js = await connect_to_nats(server=str(nats_config.dsn))
+    storage: NatsStorage = await NatsStorage(nc=nc, js=js).create_storage()
+
+    dp = Dispatcher(storage=storage)
 
     db_config = get_config(DbConfig, "db")
     engine = create_async_engine(url=str(db_config.dsn))
