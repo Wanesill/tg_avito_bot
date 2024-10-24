@@ -8,7 +8,7 @@ from fluentogram import TranslatorRunner
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.database import Profile
-from bot.database.requests import get_profile
+from bot.database.requests import get_profile, insert_account_slots
 
 if TYPE_CHECKING:
     from bot.locales.stub import TranslatorRunner
@@ -26,8 +26,10 @@ async def process_start_command(
     telegram_id = message.from_user.id
     profile: Profile = await get_profile(session, telegram_id)
 
-    if profile.is_start:
-        logger.info(i18n.logging.new_profile(telegram_id=str(telegram_id)))
+    if profile.is_start and not profile.account_slots:
+        await insert_account_slots(session, profile, 1)
         await message.answer(text=i18n.message.start.profile.new())
+
+        logger.info(i18n.logging.new_profile(telegram_id=str(telegram_id)))
     else:
         await message.answer(text=i18n.message.start.profile.old())
